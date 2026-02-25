@@ -22,21 +22,13 @@ engine or game code.
 
 ## Example Script
 
-    func update(dt, threshold = 0.1)
-
-        if dt > threshold
-            send_display_signal("Slow frame")
-        end if
-
+    func test
+        my_api_method()
     end func
-
-## Example Function Call
-
-    call update(dt = 0.016)
 
 ## Architecture
 
-Script → Compiler → Program → Interpreter → ModAPI
+Script → Compiler → Program → Interpreter
 
 ### Compiler
 
@@ -61,8 +53,6 @@ Responsibilities:
 -   Handle control flow
 -   Support async execution
 
-The Interpreter does not depend on the SceneTree.
-
 ### ModAPI
 
 The ModAPI exposes safe functionality to scripts.
@@ -75,12 +65,8 @@ class_name ExampleModAPI
 
 signal display(text: String)
 
-func send_display_signal(text: String):
+func send_display_signal(text: String) -> void:
     display.emit(text)
-    return null
-
-func wait(seconds: float):
-    await get_tree().create_timer(seconds).timeout
     return null
 ```
 
@@ -111,33 +97,15 @@ await interpreter.run_function("update")
 
 Functions are defined as:
 
-    func name(parameters)
+    func name
 
     end func
 
 Example:
 
-    func move(x, y)
+    func move
 
     end func
-
-## Parameters
-
-Functions support named parameters:
-
-    call move(x = 3, y = 4)
-
-## Optional Parameters
-
-Functions can define defaults:
-
-    func spawn_enemy(type, hp = 100)
-
-    end func
-
-Example call:
-
-    call spawn_enemy(type = "orc")
 
 ## Variables
 
@@ -169,17 +137,6 @@ Variables are local to each function call.
         x = x + 1
 
     end while
-
-## Async Execution
-
-Scripts can run asynchronously.
-
-    wait(1)
-    send_display_signal("Done")
-
-The wait() function is implemented in ModAPI.
-
-Scripts do not block the game.
 
 ## Installation
 
