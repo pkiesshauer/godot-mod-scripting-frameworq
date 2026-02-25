@@ -18,7 +18,7 @@ engine or game code.
 ## Example Script
 
     func test
-        my_api_method()
+        send_display_signal("Hallo Welt!")
     end func
 
 ## Architecture
@@ -75,7 +75,7 @@ func send_display_signal(text: String) -> void:
 var script = FileAccess.get_file_as_string("res://script.txt")
 var program = Compiler.compile(script)
 
-if program.error:
+if program.error != OK:
     print(program.error_message)
     return
 ```
@@ -87,7 +87,7 @@ var interpreter = Interpreter.new()
 
 interpreter.setup(program, ExampleModAPI.new())
 
-await interpreter.run_function("update")
+await interpreter.run_function("test")
 ```
 
 ## Functions
