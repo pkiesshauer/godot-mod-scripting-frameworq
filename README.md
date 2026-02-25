@@ -138,6 +138,12 @@ Variables are local to each function call.
 
     end while
 
+## ModAPI
+
+Extend ModAPI to define your own api-methods that scripts can access.
+Scripts are dynamically typed, so make sure to type check.
+Game constants can be added to the ModAPI.context, so all script-functions can access them.
+
 ## Installation
 
 Copy the addon folder into your project:
