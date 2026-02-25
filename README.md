@@ -12,13 +12,8 @@ engine or game code.
 -   Custom scripting language
 -   Safe execution through ModAPI
 -   Local variable scopes
--   Functions and parameters
--   Optional parameters with defaults
--   If / Else control flow
--   While loops
+-   control flow (if/else, while)
 -   Expression evaluation via Godot Expression
--   Async execution support
--   Plugin-based architecture
 
 ## Example Script
 
@@ -51,11 +46,14 @@ Responsibilities:
 -   Maintain local variable contexts
 -   Evaluate expressions
 -   Handle control flow
--   Support async execution
 
 ### ModAPI
 
 The ModAPI exposes safe functionality to scripts.
+
+Extend ModAPI to define your own api-methods that scripts can access.
+Scripts are dynamically typed, so make sure to type check.
+Game constants can be added to the ModAPI.context, so all script-functions can access them.
 
 Example:
 
@@ -67,7 +65,6 @@ signal display(text: String)
 
 func send_display_signal(text: String) -> void:
     display.emit(text)
-    return null
 ```
 
 ## Using ModScript
@@ -137,12 +134,6 @@ Variables are local to each function call.
         x = x + 1
 
     end while
-
-## ModAPI
-
-Extend ModAPI to define your own api-methods that scripts can access.
-Scripts are dynamically typed, so make sure to type check.
-Game constants can be added to the ModAPI.context, so all script-functions can access them.
 
 ## Installation
 
