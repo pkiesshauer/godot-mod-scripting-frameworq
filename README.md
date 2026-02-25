@@ -1,6 +1,6 @@
-# ModScript -- Lightweight Modding Language for Godot
+# Mod Scripting FrameworQ -- Lightweight Modding System for Godot
 
-ModScript is a lightweight scripting language for Godot designed for
+Mod Scripting FrameworQ is a lightweight scripting system for Godot designed for
 safe and simple modding support.
 
 It provides a small interpreted language that runs on top of Godot using
@@ -12,7 +12,7 @@ engine or game code.
 -   Custom scripting language
 -   Safe execution through ModAPI
 -   Local variable scopes
--   control flow (if/else, while)
+-   Control flow (if/else, while)
 -   Expression evaluation via Godot Expression
 
 ## Example Script
