@@ -1,0 +1,7 @@
+func print_player_health
+send_display_signal(player_health)
+end func
+
+func hurt_player
+hurt_player(20)
+end func

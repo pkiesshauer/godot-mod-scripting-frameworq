@@ -1,0 +1,3 @@
+func example1
+send_display_signal("Hallo Welt!")
+end func

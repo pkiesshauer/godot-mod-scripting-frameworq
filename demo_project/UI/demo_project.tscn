@@ -1,0 +1,126 @@
+[gd_scene format=3 uid="uid://5bwv64i3jmdl"]
+
+[ext_resource type="Script" uid="uid://dcjeykvv2g0oa" path="res://demo_project/UI/demo_project.gd" id="1_22g2r"]
+[ext_resource type="PackedScene" uid="uid://bb2n3shtb6wqy" path="res://demo_project/game/game.tscn" id="1_jjin1"]
+
+[sub_resource type="CodeHighlighter" id="CodeHighlighter_lfdd1"]
+number_color = Color(0.6313726, 1, 0.8784314, 1)
+symbol_color = Color(0.67058825, 0.7882353, 1, 1)
+function_color = Color(0.34117648, 0.7019608, 1, 1)
+keyword_colors = {
+"else": Color(1, 0.54901963, 0.8, 1),
+"end": Color(1, 0.4392157, 0.52156866, 1),
+"end func": Color(1, 0.4392157, 0.52156866, 1),
+"end if": Color(1, 0.54901963, 0.8, 1),
+"func": Color(1, 0.4392157, 0.52156866, 1),
+"if": Color(1, 0.54901963, 0.8, 1),
+"while": Color(1, 0.54901963, 0.8, 1)
+}
+
+[node name="DemoProject" type="MarginContainer" unique_id=1856701032 node_paths=PackedStringArray("code_edit", "v_box_container_constants", "button_compile", "option_button_functions", "button_run", "game", "output")]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+script = ExtResource("1_22g2r")
+code_edit = NodePath("HBoxContainer/HBoxContainer/VBoxContainer/CodeEdit")
+v_box_container_constants = NodePath("HBoxContainer/HBoxContainer/VBoxContainerConstants")
+button_compile = NodePath("HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ButtonCompile")
+option_button_functions = NodePath("HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/OptionButtonFunctions")
+button_run = NodePath("HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ButtonRun")
+game = NodePath("HBoxContainer/VBoxContainer2/Game")
+output = NodePath("HBoxContainer/VBoxContainer2/output")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=687394451]
+layout_mode = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer" unique_id=738017128]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="VBoxContainerConstants" type="VBoxContainer" parent="HBoxContainer/HBoxContainer" unique_id=771494682]
+custom_minimum_size = Vector2(64, 0)
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/HBoxContainer" unique_id=2095169016]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/HBoxContainer/VBoxContainer" unique_id=1955189111]
+layout_mode = 2
+
+[node name="ButtonCompile" type="Button" parent="HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1593252604]
+layout_mode = 2
+text = "Compile"
+
+[node name="OptionButtonFunctions" type="OptionButton" parent="HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1700548883]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="ButtonRun" type="Button" parent="HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer" unique_id=2055207628]
+clip_contents = true
+custom_minimum_size = Vector2(50, 0)
+layout_mode = 2
+disabled = true
+text = "Run"
+
+[node name="CodeEdit" type="CodeEdit" parent="HBoxContainer/HBoxContainer/VBoxContainer" unique_id=672362188]
+layout_mode = 2
+size_flags_vertical = 3
+text = "func test
+reset()
+assign_shape(SHAPE_CIRCLE, COLOR_BLUE, 1, 1)
+assign_random_shape(COLOR_RED, 2, 3)
+assign_random_color(SHAPE_TRIANGLE, 4, 2)
+assign_random(0,3)
+end func
+
+func test2
+	x = 0
+	while x < 5
+		y = 0
+		while y < 4
+			assign_random(x,y)
+			y = y + 1
+		end while
+		x = x + 1
+	end while
+end func
+
+func test3
+	x = 0
+	while x < 5
+		y = 0
+		while y < 4
+			if shape(x,y) == SHAPE_TRIANGLE
+				assign_shape(SHAPE_TRIANGLE,COLOR_RED,x,y)
+			end if
+			y = y + 1
+		end while
+		x = x + 1
+	end while
+end func"
+syntax_highlighter = SubResource("CodeHighlighter_lfdd1")
+gutters_draw_line_numbers = true
+code_completion_enabled = true
+
+[node name="OptionButtonExamples" type="OptionButton" parent="HBoxContainer/HBoxContainer/VBoxContainer" unique_id=114948057]
+layout_mode = 2
+selected = 0
+item_count = 1
+popup/item_0/text = "Select Script"
+popup/item_0/id = 0
+
+[node name="VBoxContainer2" type="VBoxContainer" parent="HBoxContainer" unique_id=482146973]
+layout_mode = 2
+
+[node name="Game" parent="HBoxContainer/VBoxContainer2" unique_id=753947429 instance=ExtResource("1_jjin1")]
+layout_mode = 2
+
+[node name="output" type="RichTextLabel" parent="HBoxContainer/VBoxContainer2" unique_id=1795031821]
+layout_mode = 2
+size_flags_vertical = 3
+
+[connection signal="pressed" from="HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ButtonCompile" to="." method="_on_button_compile_pressed"]
+[connection signal="pressed" from="HBoxContainer/HBoxContainer/VBoxContainer/HBoxContainer/ButtonRun" to="." method="_on_button_run_pressed"]

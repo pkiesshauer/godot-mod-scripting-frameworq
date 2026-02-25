@@ -1,0 +1,73 @@
+[gd_scene format=3 uid="uid://bb2n3shtb6wqy"]
+
+[ext_resource type="Script" uid="uid://celvtonxmnfe8" path="res://demo_project/game/game.gd" id="1_0ghf8"]
+[ext_resource type="PackedScene" uid="uid://7k2r23fkerxx" path="res://demo_project/UI/grid_element.tscn" id="1_knrwf"]
+
+[node name="Game" type="GridContainer" unique_id=753947429]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+columns = 5
+script = ExtResource("1_0ghf8")
+
+[node name="GridElement1" parent="." unique_id=206180678 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement2" parent="." unique_id=960748446 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement3" parent="." unique_id=2145478173 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement4" parent="." unique_id=1817894774 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement5" parent="." unique_id=1881685229 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement6" parent="." unique_id=1796560466 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement7" parent="." unique_id=259764207 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement8" parent="." unique_id=631403537 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement9" parent="." unique_id=1770231636 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement10" parent="." unique_id=2142177338 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement11" parent="." unique_id=383435416 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement12" parent="." unique_id=2013806258 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement13" parent="." unique_id=834288869 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement14" parent="." unique_id=1471378937 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement15" parent="." unique_id=620956704 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement16" parent="." unique_id=50733094 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement17" parent="." unique_id=402278119 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement18" parent="." unique_id=1289017902 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement19" parent="." unique_id=1640854531 instance=ExtResource("1_knrwf")]
+layout_mode = 2
+
+[node name="GridElement20" parent="." unique_id=793616751 instance=ExtResource("1_knrwf")]
+layout_mode = 2
