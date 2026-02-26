@@ -9,18 +9,24 @@ var endif_map: Dictionary[int, int]
 var while_end_map: Dictionary[int, int]
 var end_while_map: Dictionary[int, int]
 
+var parameters: Array[String]
+var defaults: Dictionary[String, String]
+
 func _to_string() -> String:
-	var text: String = "FUNC " + name
+	var text: String = "FUNC " + name + "("
+	for p in parameters:
+		if defaults.has(p):
+			text += "%s = %s, " % [p, defaults[p]]
+		else:
+			text += p + ", "
+	if parameters.size() > 0:
+		text = text.substr(0, text.length() - 2) + ")"
 	text += "\n"
 	for i in instructions.size():
 		text += str(i) + "/" + instructions[i].to_string()
 		text += "\n"
-	text += str(else_map)
+	text += str(parameters)
 	text += "\n"
-	text += str(endif_map)
-	text += "\n"
-	text += str(while_end_map)
-	text += "\n"
-	text += str(end_while_map)
+	text += str(defaults)
 	text += "\n"
 	return text

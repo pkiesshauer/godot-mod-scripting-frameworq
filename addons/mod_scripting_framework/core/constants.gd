@@ -10,5 +10,5 @@ enum InstructionType {
 	EXPRESSION,
 	WHILE,
 	END_WHILE,
-	WAIT
+	CALL
 }

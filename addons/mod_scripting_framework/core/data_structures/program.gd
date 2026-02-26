@@ -13,3 +13,9 @@ func _to_string() -> String:
 	for f in functions.keys():
 		text += functions[f].to_string()
 	return text
+
+func duplicate_globals() -> Dictionary:
+	return globals.duplicate()
+
+func has_function(function_name) -> bool:
+	return functions.has(function_name)

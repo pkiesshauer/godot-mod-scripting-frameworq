@@ -13,11 +13,19 @@ func setup(p: Program, api: ModAPI):
 	mod_api = api
 
 func run_function(name: String):
-	if not program.functions.has(name):
+	if not program.has_function(name):
 		return
-	var local_context: Dictionary = program.globals.duplicate()
+	var local_context: Dictionary = program.duplicate_globals()
 	var function: Function = program.functions[name]
 	execute_function(function, local_context)
+
+func run_function_internal(name: String, local_context: Dictionary):
+	if not program.has_function(name):
+		return
+	var merge = program.duplicate_globals()
+	merge.merge(local_context, true)
+	var function: Function = program.functions[name]
+	execute_function(function, merge)
 
 func execute_function(function: Function, local_context: Dictionary):
 	var instruction_pointer: int = 0
@@ -27,18 +35,21 @@ func execute_function(function: Function, local_context: Dictionary):
 		instruction_pointer = execute_instruction(function, instr, instruction_pointer, local_context)
 		instruction_count += 1
 
-func execute_instruction(function: Function, instr: Instruction, instruction_pointer: int, local_context: Dictionary) -> int:
-	match instr.type:
-		Constants.InstructionType.IF: return exec_if(function, instr, instruction_pointer, local_context)
+func execute_instruction(function: Function, instruction: Instruction, instruction_pointer: int, local_context: Dictionary) -> int:
+	match instruction.type:
+		Constants.InstructionType.IF: return exec_if(function, instruction, instruction_pointer, local_context)
 		Constants.InstructionType.ELSE: return function.endif_map[instruction_pointer] + 1
 		Constants.InstructionType.END_IF: return instruction_pointer + 1
-		Constants.InstructionType.WHILE: return exec_while(function, instr, instruction_pointer, local_context)
+		Constants.InstructionType.WHILE: return exec_while(function, instruction, instruction_pointer, local_context)
 		Constants.InstructionType.END_WHILE: return function.end_while_map[instruction_pointer]
 		Constants.InstructionType.ASSIGN:
-			exec_assign(instr, local_context)
+			exec_assign(instruction, local_context)
 			return instruction_pointer + 1
 		Constants.InstructionType.EXPRESSION:
-			eval_expression(instr, local_context)
+			eval_expression(instruction, local_context)
+			return instruction_pointer + 1
+		Constants.InstructionType.CALL:
+			run_function_internal(instruction.expression, instruction.parameters)
 			return instruction_pointer + 1
 	return instruction_pointer + 1
 

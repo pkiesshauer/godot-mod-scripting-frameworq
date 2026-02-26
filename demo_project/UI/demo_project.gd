@@ -28,6 +28,7 @@ func compile_script():
 	program = compiler.compile(code_edit.text)
 	if program.error == OK:
 		compile_success()
+		print(program)
 	else:
 		compile_error()
 

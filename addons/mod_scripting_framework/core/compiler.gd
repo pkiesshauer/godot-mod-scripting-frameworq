@@ -25,9 +25,14 @@ const KW_ELSE: String = "else"
 const KW_END_IF: String = "end if"
 const KW_WHILE: String = "while "
 const KW_END_WHILE: String = "end while"
-const KW_WAIT: String = "wait"
+const KW_CALL: String = "call "
 
 func compile(script: String) -> Program:
+	var program: Program = compile_pass(script)
+	program = call_binding_pass(program)
+	return program
+
+func compile_pass(script: String) -> Program:
 	var lines = script.split("\n")
 	var program: Program = Program.new()
 	program.source = script
@@ -44,12 +49,17 @@ func compile(script: String) -> Program:
 		text_line = text_line.strip_edges()
 		if text_line.begins_with(KW_FUNC):
 			if inside_func: return compile_error(program, "Unexpected 'func'", script_line)
-			var func_name: String = text_line.substr(KW_FUNC.length()).strip_edges()
+			var expression: String = text_line.substr(KW_FUNC.length()).strip_edges()
+			var func_name: String = split_function_name(expression)
 			if func_name == "": return compile_error(program, "Missing function name", script_line)
+			if not is_valid_identifier(func_name): return compile_error(program, "Invalid function name", script_line)
+			if not is_valid_parameter_list(expression): return compile_error(program, "Invalid parameter list", script_line)
 			if program.functions.keys().has(func_name): return compile_error(program, "Function name duplicate", script_line)
 			current_func = Function.new()
 			current_func.name = func_name
 			current_func.start_line = script_line+1
+			current_func.parameters = split_parameter_list(expression)
+			current_func.defaults = split_default_list(expression)
 			inside_func = true
 		elif text_line.begins_with(KW_END_FUNC):
 			if text_line != KW_END_FUNC: return compile_error(program, "Unexpected text after 'end func'", script_line)
@@ -119,14 +129,15 @@ func compile(script: String) -> Program:
 			current_func.while_end_map[current_while.while_line] = current_while.end_while_line
 			current_func.end_while_map[current_while.end_while_line] = current_while.while_line
 			current_func.instructions.push_back(instruction)
-		#elif text_line.begins_with(KW_WAIT):
-			#var instruction: Instruction = Instruction.new()
-			#instruction.script_line = script_line
-			#instruction.type = Constants.InstructionType.WAIT
-			#var exp = text_line.substr(KW_WAIT.length()).strip_edges()
-			#if not exp.is_valid_int(): return compile_error(program, "Argument for 'wait' is not an integer", script_line)
-			#instruction.expression = exp
-			#current_func.instructions.push_back(instruction)
+		elif text_line.begins_with(KW_CALL):
+			var instruction: Instruction = Instruction.new()
+			instruction.script_line = script_line
+			instruction.type = Constants.InstructionType.CALL
+			var expression = text_line.substr(KW_CALL.length()).strip_edges()
+			if not is_valid_parameter_list(expression, true): return compile_error(program, "Invalid parameter list", script_line)
+			instruction.expression = split_function_name(expression)
+			instruction.parameters = split_parameter_list_call(expression)
+			current_func.instructions.push_back(instruction)
 		elif text_line == "":
 			pass
 		else:
@@ -157,7 +168,20 @@ func compile(script: String) -> Program:
 		return compile_error(program, "Missing 'end func' for '%s'" % current_func.name, lines.size()-1)
 	return program
 
-func compile_error(program, message, line) -> Program:
+func call_binding_pass(program: Program) -> Program:
+	for function_name in program.functions:
+		var function: Function = program.functions[function_name]
+		for instruction in function.instructions:
+			if instruction.type == Constants.InstructionType.CALL:
+				if not program.functions.has(instruction.expression):
+					return compile_error(program, "Unknown function '%s'", instruction.script_line)
+				else:
+					var target_function: Function = program.functions[instruction.expression]
+					for p in target_function.parameters:
+						if not instruction.parameters.has(p): return compile_error(program, "Missing parameter '%s'"%p,instruction.script_line)
+	return program
+
+func compile_error(program: Program, message: String, line: int) -> Program:
 	program.error = FAILED
 	program.error_message = "Compile Error: %s on line %d" % [message, line+1]
 	return program
@@ -175,6 +199,75 @@ func find_assignment_operator(line:String) -> int:
 						return -1
 					return i
 	return -1
+
+func is_valid_parameter_list(expression: String, call: bool = false) -> bool:
+	if is_valid_identifier(expression): return true
+	var begin: int = expression.find("(")
+	if not expression.ends_with(")"): return false
+	if begin < 0: return false
+	var trim_expression: String = expression.substr(begin+1, expression.length() - begin - 2)
+	var split = trim_expression.split(",")
+	var parameters: Array[String]
+	for parameter in split:
+		if is_valid_identifier(parameter):
+			if call: return false
+			continue
+		var assign_pos: int = find_assignment_operator(parameter)
+		if assign_pos < 0: return false
+		var var_name = parameter.substr(0, assign_pos).strip_edges()
+		if not is_valid_identifier(var_name): return false
+		if parameters.has(var_name): return false
+		parameters.push_back(parameter)
+	return true
+
+func split_default_list(expression: String) -> Dictionary[String, String]:
+	var begin: int = expression.find("(")
+	var trim_expression: String = expression.substr(begin+1, expression.length() - begin - 2)
+	var split = trim_expression.split(",")
+	var defaults: Dictionary[String, String]
+	for parameter in split:
+		if not is_valid_identifier(parameter):
+			var assign_pos: int = find_assignment_operator(parameter)
+			var parameter_name: String = parameter.substr(0, assign_pos).strip_edges()
+			var parameter_expression = parameter.substr(assign_pos+1).strip_edges()
+			defaults[parameter_name] = parameter_expression
+	return defaults
+
+func split_parameter_list(expression: String) -> Array[String]:
+	if is_valid_identifier(expression): return []
+	var begin: int = expression.find("(")
+	var trim_expression: String = expression.substr(begin+1, expression.length() - begin - 2)
+	var split = trim_expression.split(",")
+	var parameters: Array[String]
+	for parameter in split:
+		var parameter_name: String = ""
+		if is_valid_identifier(parameter):
+			parameter_name = parameter
+		else:
+			var assign_pos: int = find_assignment_operator(parameter)
+			parameter_name = parameter.substr(0, assign_pos).strip_edges()
+		parameters.push_back(parameter_name)
+	return parameters
+
+func split_function_name(expression: String) -> String:
+	if is_valid_identifier(expression): return expression
+	var split = expression.split("(")
+	if split.size() > 0:
+		return split[0]
+	return ""
+
+func split_parameter_list_call(expression: String) -> Dictionary[String, String]:
+	if is_valid_identifier(expression): return {}
+	var begin: int = expression.find("(")
+	var trim_expression: String = expression.substr(begin+1, expression.length() - begin - 2)
+	var split = trim_expression.split(",")
+	var parameters: Dictionary[String, String]
+	for parameter in split:
+		var assign_pos: int = find_assignment_operator(parameter)
+		var parameter_name: String = parameter.substr(0, assign_pos).strip_edges()
+		var parameter_expression: String =parameter.substr(assign_pos+1).strip_edges()
+		parameters[parameter_name] = parameter_expression
+	return parameters
 
 func is_valid_identifier(identifier: String) -> bool:
 	for i in range(identifier.length()):
