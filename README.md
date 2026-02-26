@@ -13,6 +13,7 @@ engine or game code.
 -   Safe execution through ModAPI
 -   Local variable scopes
 -   Control flow (if/else, while)
+-   Script internal function calls allow for parameters
 -   Expression evaluation via Godot Expression
 
 ## Example Script
@@ -35,6 +36,7 @@ Responsibilities:
 -   Parse instructions
 -   Resolve control flow
 -   Validate syntax
+-   Validate Call parameters
 
 ### Interpreter
 
@@ -100,9 +102,22 @@ Functions are defined as:
 
 Example:
 
-    func move
+    func jump
 
     end func
+
+Functions can have parameters with default values:
+
+    func move(x, y=3)
+
+    end func
+
+Functions can be called like this:
+
+    call jump
+    call move(x=3, y=4)
+
+Parameters must be explicitly named in the call. If a function does not have or need parameters, the brackets can be omitted.
 
 ## Variables
 
