@@ -69,7 +69,16 @@ text = "Run"
 [node name="CodeEdit" type="CodeEdit" parent="HBoxContainer/HBoxContainer/VBoxContainer" unique_id=672362188]
 layout_mode = 2
 size_flags_vertical = 3
-text = "func test
+text = "func test_draw
+reset()
+call draw(x=1,y=1)
+end func
+
+func draw(x,y)
+assign_random(x,y)
+end func
+
+func test
 reset()
 assign_shape(SHAPE_CIRCLE, COLOR_BLUE, 1, 1)
 assign_random_shape(COLOR_RED, 2, 3)

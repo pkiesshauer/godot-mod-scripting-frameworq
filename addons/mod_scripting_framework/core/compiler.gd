@@ -178,7 +178,9 @@ func call_binding_pass(program: Program) -> Program:
 				else:
 					var target_function: Function = program.functions[instruction.expression]
 					for p in target_function.parameters:
-						if not instruction.parameters.has(p): return compile_error(program, "Missing parameter '%s'"%p,instruction.script_line)
+						if not instruction.parameters.has(p):
+							if not target_function.defaults.has(p):
+								return compile_error(program, "Missing parameter '%s'"%p,instruction.script_line)
 	return program
 
 func compile_error(program: Program, message: String, line: int) -> Program:

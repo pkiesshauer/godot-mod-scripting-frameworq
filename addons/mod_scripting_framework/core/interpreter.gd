@@ -46,40 +46,51 @@ func execute_instruction(function: Function, instruction: Instruction, instructi
 			exec_assign(instruction, local_context)
 			return instruction_pointer + 1
 		Constants.InstructionType.EXPRESSION:
-			eval_expression(instruction, local_context)
+			eval_expression(instruction.expression, instruction.script_line, local_context)
 			return instruction_pointer + 1
 		Constants.InstructionType.CALL:
-			run_function_internal(instruction.expression, instruction.parameters)
+			var parameters: Dictionary = eval_parameters(function, instruction, local_context)
+			print(parameters)
+			run_function_internal(instruction.expression, parameters)
 			return instruction_pointer + 1
 	return instruction_pointer + 1
 
-func exec_if(function: Function, instr: Instruction, instruction_pointer: int, local_context: Dictionary) -> int:
-	var result = eval_expression(instr, local_context)
+func exec_if(function: Function, instruction: Instruction, instruction_pointer: int, local_context: Dictionary) -> int:
+	var result = eval_expression(instruction.expression, instruction.script_line, local_context)
 	if result:
 		return instruction_pointer + 1
 	else:
 		return function.else_map[instruction_pointer] + 1
 
-func exec_while(function: Function, instr: Instruction, instruction_pointer: int, local_context: Dictionary) -> int:
-	var result = eval_expression(instr, local_context)
+func exec_while(function: Function, instruction: Instruction, instruction_pointer: int, local_context: Dictionary) -> int:
+	var result = eval_expression(instruction.expression, instruction.script_line, local_context)
 	if result:
 		return instruction_pointer + 1
 	else:
 		return function.while_end_map[instruction_pointer] + 1
 
-func exec_assign(instr: Instruction, local_context: Dictionary):
-	var value = eval_expression(instr, local_context)
-	local_context[instr.variable_name] = value
-	if program.globals.has(instr.variable_name):
-		program.globals[instr.variable_name] = value
+func exec_assign(instruction: Instruction, local_context: Dictionary):
+	var value = eval_expression(instruction.expression, instruction.script_line, local_context)
+	local_context[instruction.variable_name] = value
+	if program.globals.has(instruction.variable_name):
+		program.globals[instruction.variable_name] = value
 
-func eval_expression(instr: Instruction, local_context: Dictionary):
+func eval_parameters(function: Function, instruction: Instruction, local_context: Dictionary) -> Dictionary:
+	var result: Dictionary
+	var target_function: Function = program.functions[instruction.expression]
+	for d in target_function.defaults:
+		result[d] = eval_expression(target_function.defaults[d], instruction.script_line, local_context)
+	for p in instruction.parameters:
+		result[p] = eval_expression(instruction.parameters[p], instruction.script_line, local_context)
+	return result
+
+func eval_expression(expression_text: String, script_line: int, local_context: Dictionary):
 	var expression = Expression.new()
 	var merge_context: Dictionary = mod_api.context.duplicate(true)
 	merge_context.merge(local_context, true)
-	var err = expression.parse(instr.expression, merge_context.keys())
+	var err = expression.parse(expression_text, merge_context.keys())
 	if err != OK:
-		error.emit("Expression parse error on line %s: %s" % [instr.script_line+1, expression.get_error_text()])
+		error.emit("Expression parse error on line %s: %s" % [script_line+1, expression.get_error_text()])
 		return null
 	var result = expression.execute(merge_context.values(), mod_api)
 	if expression.has_execute_failed():
