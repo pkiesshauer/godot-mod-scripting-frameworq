@@ -16,6 +16,9 @@ engine or game code.
 -   Script internal function calls allow for parameters
 -   Expression evaluation via Godot Expression
 
+## Interactive Demo
+https://pkiesshauer.itch.io/godot-mod-scripting-frameworq
+
 ## Example Script
 
     func test
