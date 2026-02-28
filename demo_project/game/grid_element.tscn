@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://7k2r23fkerxx"]
+
+[ext_resource type="Script" uid="uid://qbic56sgkdcc" path="res://demo_project/game/grid_element.gd" id="1_i30ld"]
+[ext_resource type="Texture2D" uid="uid://ctrf6avvh04r8" path="res://demo_project/icons/square.png" id="3_2j5lh"]
+
+[node name="GridElement" type="TextureRect" unique_id=206180678]
+custom_minimum_size = Vector2(64, 64)
+offset_right = 128.0
+offset_bottom = 128.0
+texture = ExtResource("3_2j5lh")
+script = ExtResource("1_i30ld")

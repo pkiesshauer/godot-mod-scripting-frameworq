@@ -1,0 +1,95 @@
+Scripts are stored and read as plain text, so they can be easily written and edited in any text editor.
+
+[b]General[/b]
+Indentation is optional.
+Each command needs to be on its own line as shown in the examples.
+
+===============================================
+
+[b]Functions[/b]
+Every function has to start with [color=#ff7085]func[/color] and end with [color=#ff7085]end func[/color], and it has to have a valid name, starting with a letter (a-zA-Z) and containing only letters, numbers and '_'(a-zA-z0-9_).
+
+Example:
+	[color=#ff7085]func[/color] test
+	[color=#ff7085]end func[/color]
+
+[i]Parameters[/i]
+Parameters are optional. If a function takes parameters, they have to be listed in brackets. Optionally, a default value can be assigned. The order of parameters does not matter.
+
+Example:
+	[color=#ff7085]func[/color] test_parameters(x,y=3)
+	[color=#ff7085]end func[/color]
+
+Functions with parameters can only be called from inside the game if their parameters are added to the list of API variables before calling. Therefore functions with parameters can only be called from other script functions in this demo.
+
+===============================================
+
+[b]API Calls[/b]
+The script is interpreted on a ModAPI internally. The script can call any function that is defined in the ModAPI being used. Functions are called by their name followed by brackets. If the function requires parameters, they must be put in the brackets in the correct order.
+
+Example:
+	[color=#ff7085]func[/color] test_api_calls
+		damage_player(20)
+	[color=#ff7085]end func[/color]
+
+===============================================
+
+[b]Script Calls[/b]
+Scripts can call their own functions by using the [color=#ff7085]call[/color] keyword followed by the function name. If the function does not require parameters, no brackets are required, otherwise the function must be called by explicitly assigning values to the parameters. Optional parameters may be omitted.
+
+Example:
+	[color=#ff7085]func[/color] test_script_call1
+		call test_script_call2(enemy_type = "zombie", enemy_name = "Steve")
+	[color=#ff7085]end func[/color]
+	
+	[color=#ff7085]func[/color] test_script_call2(enemy_type = "orc", enemy_name)
+		spawn(enemy_type, enemy_name)
+	[color=#ff7085]end func[/color]
+
+===============================================
+
+[b]Variables[/b]
+Variables are dynamically typed. Catching any type mismatch for API calls must happen inside the ModAPI. A variable is initialized by assigning a value to it. There are 3 levels of variables.
+[ol]
+API variables are readonly for the script and allows the modAPI to pass environment variables to the script. A ModAPI-function should be implemented to explicitly give scripts access to API variables.
+Global variables can be initiated in the script body outside of any function. If an API variable of the same name is present, the global variable shadows it.
+Local variables need to be initiated inside a function or as its parameters. If a global or API variable of the same name is present, the local variable shadows them.
+[/ol]
+Assignments are evaluated as expressions, which allows for function calls directly inside an assignment.
+
+Example:
+	ticks_left = 0
+	[color=#ff7085]func[/color] test_variables
+		x = 7
+	[color=#ff7085]end func[/color]
+
+===============================================
+
+[b]Conditionals[/b]
+Conditional blocks start with the [color=#ff8ccc]if[/color] keyword and end with [color=#ff8ccc]end if[/color]. The condition follows the [color=#ff8ccc]if[/color] keyword with a space between them and needs to be an expression resolving to a boolean. The if-block will be executed when the expression resolves to 'true'. An optional [color=#ff8ccc]else[/color] can also be used to indicate a code block that runs when the expression resolves to 'false'. Conditionals can be nested.
+
+Example:
+	[color=#ff7085]func[/color] test_conditional
+		[color=#ff8ccc]if[/color] player_health > 99
+			attack = 20
+		[color=#ff8ccc]else[/color]
+			[color=#ff8ccc]if[/color] player_healt > 50
+				attack = 10
+			[color=#ff8ccc]else[/color]
+				attack = 5
+			[color=#ff8ccc]end if[/color]
+		[color=#ff8ccc]end if[/color]
+	[color=#ff7085]end func[/color]
+
+===============================================
+
+[b]Loops[/b]
+A loop starts with the [color=#ff8ccc]while[/color] keyword and ends with [color=#ff8ccc]end while[/color]. The condition follows the [color=#ff8ccc]while[/color] keyword with a space between them and needs to be an expression resolving to a boolean. The loop block will be executed when the expression resolves to 'true'. Loops can be nested.
+
+Example:
+	[color=#ff7085]func[/color] test_loop
+		x = 0
+		[color=#ff8ccc]while[/color] x < 5
+			
+		[color=#ff8ccc]end while[/color]
+	[color=#ff7085]end func[/color]

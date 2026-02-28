@@ -12,6 +12,9 @@ var end_while_map: Dictionary[int, int]
 var parameters: Array[String]
 var defaults: Dictionary[String, String]
 
+func has_parameters() -> bool:
+	return parameters.size() > 0
+
 func _to_string() -> String:
 	var text: String = "FUNC " + name + "("
 	for p in parameters:

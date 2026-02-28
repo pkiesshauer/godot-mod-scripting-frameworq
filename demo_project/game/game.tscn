@@ -1,7 +1,7 @@
 [gd_scene format=3 uid="uid://bb2n3shtb6wqy"]
 
 [ext_resource type="Script" uid="uid://celvtonxmnfe8" path="res://demo_project/game/game.gd" id="1_0ghf8"]
-[ext_resource type="PackedScene" uid="uid://7k2r23fkerxx" path="res://demo_project/UI/grid_element.tscn" id="1_knrwf"]
+[ext_resource type="PackedScene" uid="uid://7k2r23fkerxx" path="res://demo_project/game/grid_element.tscn" id="1_knrwf"]
 
 [node name="Game" type="GridContainer" unique_id=753947429]
 anchors_preset = 15

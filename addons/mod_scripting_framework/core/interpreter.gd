@@ -8,16 +8,20 @@ var mod_api: ModAPI
 
 var max_instruction_count: int = 100000
 
+var _execute_error: bool
+
 func setup(p: Program, api: ModAPI):
 	program = p
 	mod_api = api
 
-func run_function(name: String):
+func run_function(name: String) -> bool:
 	if not program.has_function(name):
-		return
+		return true
+	_execute_error = false
 	var local_context: Dictionary = program.duplicate_globals()
 	var function: Function = program.functions[name]
 	execute_function(function, local_context)
+	return _execute_error
 
 func run_function_internal(name: String, local_context: Dictionary):
 	if not program.has_function(name):
@@ -90,11 +94,13 @@ func eval_expression(expression_text: String, script_line: int, local_context: D
 	merge_context.merge(local_context, true)
 	var err = expression.parse(expression_text, merge_context.keys())
 	if err != OK:
+		_execute_error = true
 		error.emit("Expression parse error on line %s: %s" % [script_line+1, expression.get_error_text()])
 		return null
 	var result = expression.execute(merge_context.values(), mod_api)
 	if expression.has_execute_failed():
-		print(expression.get_error_text())
+		_execute_error = true
+		error.emit("Expression parse error on line %s: %s" % [script_line+1, expression.get_error_text()])
 		return null
 	else:
 		return result

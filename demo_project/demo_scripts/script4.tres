@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="DemoScript" format=3 uid="uid://3pp1hrbspdf7"]
+
+[ext_resource type="Script" uid="uid://bvni8uxyvdoju" path="res://demo_project/game/script.gd" id="1_0qf7x"]
+
+[resource]
+script = ExtResource("1_0qf7x")
+program_name = "Loops"
+script_text = "func test
+	x = 0
+	while x < 5
+		y = 0
+		while y < 4
+			assign_random(x,y)
+			y = y + 1
+		end while
+		x = x + 1
+	end while
+end func
+
+func test2
+	x = 0
+	while x < 5
+		y = 0
+		while y < 4
+			if get_shape(x,y) == SHAPE_TRIANGLE
+				assign_shape(SHAPE_TRIANGLE,COLOR_RED,x,y)
+			end if
+			y = y + 1
+		end while
+		x = x + 1
+	end while
+end func"
+metadata/_custom_type_script = "uid://bvni8uxyvdoju"

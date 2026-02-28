@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DemoScript" format=3 uid="uid://56f5vwkxrhb4"]
+
+[ext_resource type="Script" uid="uid://bvni8uxyvdoju" path="res://demo_project/game/script.gd" id="1_t3xuu"]
+
+[resource]
+script = ExtResource("1_t3xuu")
+program_name = "Calling the ModAPI"
+script_text = "func test
+reset()
+assign_shape(SHAPE_CIRCLE, COLOR_BLUE, 1, 1)
+assign_random_shape(COLOR_RED, 2, 3)
+assign_random_color(SHAPE_TRIANGLE, 4, 2)
+assign_random(3,0)
+end func"
+metadata/_custom_type_script = "uid://bvni8uxyvdoju"

@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DemoScript" format=3 uid="uid://bi8r6s2sp41ef"]
+
+[ext_resource type="Script" uid="uid://bvni8uxyvdoju" path="res://demo_project/game/script.gd" id="1_s1rmf"]
+
+[resource]
+script = ExtResource("1_s1rmf")
+program_name = "Internal Function Calls"
+script_text = "func test
+call draw(x=1,y=1)
+end func
+
+func draw(x,y)
+assign_random(x,y)
+end func"
+metadata/_custom_type_script = "uid://bvni8uxyvdoju"

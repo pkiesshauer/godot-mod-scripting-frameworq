@@ -7,7 +7,6 @@
 [ext_resource type="Resource" uid="uid://56f5vwkxrhb4" path="res://demo_project/demo_scripts/script1.tres" id="3_c5ajx"]
 [ext_resource type="Resource" uid="uid://bi8r6s2sp41ef" path="res://demo_project/demo_scripts/script2.tres" id="4_hscad"]
 [ext_resource type="Resource" uid="uid://b6xfgyak7l5jx" path="res://demo_project/demo_scripts/script3.tres" id="5_t2o88"]
-[ext_resource type="Resource" uid="uid://3pp1hrbspdf7" path="res://demo_project/demo_scripts/script4.tres" id="6_c5ajx"]
 
 [sub_resource type="CodeHighlighter" id="CodeHighlighter_22g2r"]
 number_color = Color(0.6313726, 1, 0.8784314, 1)
@@ -41,7 +40,7 @@ anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_22g2r")
-demo_library = Array[ExtResource("2_ccxw6")]([ExtResource("3_c5ajx"), ExtResource("4_hscad"), ExtResource("5_t2o88"), ExtResource("6_c5ajx")])
+demo_library = Array[ExtResource("2_ccxw6")]([ExtResource("3_c5ajx"), ExtResource("4_hscad"), ExtResource("5_t2o88")])
 code_edit = NodePath("HBoxContainer/HBoxContainer/MainContainer/VBoxContainer/CodeEdit")
 option_button_examples = NodePath("HBoxContainer/HBoxContainer/MainContainer/VBoxContainer/OptionButtonExamples")
 v_box_container_constants = NodePath("HBoxContainer/HBoxContainer/VBoxContainer2/VBoxContainerConstants")
@@ -193,7 +192,7 @@ func assign_shape(shape, color, x, y) -> void:
 			return
 	if not (str(x).is_valid_int() and str(x).is_valid_int()):
 		return
-	game.assign_shape_color(shape, color, int(x), int(y))
+	game.assign_shape(shape, color, int(x), int(y))
 
 func assign_random_shape(color, x, y) -> void:
 	if color is int:
@@ -201,15 +200,7 @@ func assign_random_shape(color, x, y) -> void:
 			return
 	if not (str(x).is_valid_int() and str(x).is_valid_int()):
 		return
-	game.assign_shape_color(randi_range(0, GameConstants.shape.size()-1), color, int(x), int(y))
-
-func assign_color(color, x, y) -> void:
-	if color is int:
-		if color < 0 or color > GameConstants.color.size():
-			return
-	if not (str(x).is_valid_int() and str(x).is_valid_int()):
-		return
-	game.assign_color(color, int(x), int(y))
+	game.assign_shape(randi_range(0, GameConstants.shape.size()-1), color, int(x), int(y))
 
 func assign_random_color(shape, x, y) -> void:
 	if shape is int:
@@ -217,17 +208,12 @@ func assign_random_color(shape, x, y) -> void:
 			return
 	if not (str(x).is_valid_int() and str(x).is_valid_int()):
 		return
-	game.assign_shape_color(shape, randi_range(0, GameConstants.color.size()-1), int(x), int(y))
+	game.assign_shape(shape, randi_range(0, GameConstants.color.size()-1), int(x), int(y))
 
 func assign_random(x, y) -> void:
 	if not (str(x).is_valid_int() and str(x).is_valid_int()):
 		return
-	game.assign_shape_color(randi_range(0, GameConstants.shape.size()-1), randi_range(0, GameConstants.color.size()-1), int(x), int(y))
-
-func fill_all_random() -> void:
-	for x in 5:
-		for y in 4:
-			assign_random(x,y)
+	game.assign_shape(randi_range(0, GameConstants.shape.size()-1), randi_range(0, GameConstants.color.size()-1), int(x), int(y))
 
 func get_shape(x, y) -> int:
 	if not (str(x).is_valid_int() and str(x).is_valid_int()):
@@ -239,11 +225,11 @@ func get_color(x, y) -> int:
 		return GameConstants.color.WHITE
 	return game.get_color(int(x),int(y))
 
+
 func reset() -> void:
 	game.reset()
 "
 editable = false
-scroll_vertical = 34.81481481481481
 syntax_highlighter = SubResource("CodeHighlighter_22g2r")
 metadata/_tab_index = 1
 

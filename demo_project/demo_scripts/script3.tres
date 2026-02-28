@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="DemoScript" format=3 uid="uid://b6xfgyak7l5jx"]
+
+[ext_resource type="Script" uid="uid://bvni8uxyvdoju" path="res://demo_project/game/script.gd" id="1_ude4l"]
+
+[resource]
+script = ExtResource("1_ude4l")
+program_name = "Conditionals"
+script_text = "func test
+if get_color(1,1) == COLOR_WHITE
+assign_color(COLOR_RED, 1, 1)
+else
+assign_color(COLOR_WHITE, 1, 1)
+end if
+end func"
+metadata/_custom_type_script = "uid://bvni8uxyvdoju"
