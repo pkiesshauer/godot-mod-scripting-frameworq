@@ -103,12 +103,6 @@ Functions are defined as:
 
     end func
 
-Example:
-
-    func jump
-
-    end func
-
 Functions can have parameters with default values:
 
     func move(x, y=3)
@@ -119,6 +113,11 @@ Functions can be called like this:
 
     call jump
     call move(x=3, y=4)
+
+Functions provided by the ModAPI must be called without the 'call' keyword and always require brackets:
+
+    deal_damage()
+
 
 Parameters must be explicitly named in the call. If a function does not have or need parameters, the brackets can be omitted.
 
